@@ -1,29 +1,39 @@
+<p align="center"><img src="assets/icon.svg" width="128" alt=""></p>
+
 # nvim-notes
 
-The Claude Code half of [claude-notes.nvim](https://github.com/carloscastrojumo/claude-notes.nvim). You leave notes on code in Neovim; a Claude Code session running this mod picks them up, works through them, and writes each reply back next to the code.
+The Claude Code half of [claude-notes.nvim](https://github.com/carloscastrojumo/claude-notes.nvim). You leave notes on code in Neovim. A Claude Code session running this mod picks them up and writes each reply back next to the code. If a note is unclear, Claude asks, and the question lands in Neovim rather than in a chat you're not watching.
 
-It's a mod (a Claude Code plugin built on function hooks), so the API it uses is early access and may change between Claude Code releases. Built against 2.1.296.
+```
+✎ nvim notes: 2 open · 1 with Claude · 1 waiting on you in Neovim  [ Send 2 ]
+```
+
+It's a mod, a Claude Code plugin built on function hooks. That API is early access and can change between Claude Code releases; this one was built against 2.1.296.
 
 ## Install
+
+Clone it and load it from disk:
+
+```sh
+git clone https://github.com/carloscastrojumo/claude-notes-mod
+claude --plugin-dir <path to the clone>
+```
+
+To load it in every session without the flag, set `CLAUDE_CODE_PLUGIN_DIRS` to that path in the `env` block of `~/.claude/settings.json`.
+
+If your Claude Code accepts marketplaces outside your organisation's list, it also installs as a plugin:
 
 ```
 /plugin install nvim-notes --marketplace carloscastrojumo/claude-notes-mod
 ```
 
-Answer `y` to add the marketplace, then pick a scope. For a local checkout, `claude --plugin-dir <path to this repo>` loads it for one session.
-
 ## Use
 
-Run `/notes watch` in the session that should work on your notes. A session that isn't watching shows nothing and picks up nothing, so with several sessions in one repository you choose which one gets them.
+1. Run `/notes watch` in the session that should work on your notes. A band above the prompt shows what's open, queued, with Claude, or waiting on you.
+2. Notes you send from Neovim with `<leader>aS` arrive within about 1.5 s, as one prompt.
+3. Claude marks each note done with a one-line reply, or asks about it. The question goes to Neovim, and your answer comes back with the note.
 
-A watching session:
-
-- shows a band above the prompt with the counts and a Send button,
-- sends notes queued from Neovim within about 1.5 s, as one prompt,
-- gives Claude a `resolve_note` tool to mark each note done with a one-line reply,
-- gives Claude an `ask_about_note` tool for unclear notes. The question shows up in Neovim and your answer comes back with the note.
-
-During a notes turn the built-in question dialog is refused in favour of `ask_about_note`. Notes a finished turn left untouched get Claude's last message as their question; an interrupted turn puts them back to open.
+Only a watching session picks up notes, so with several sessions open in one repository you choose which one gets them. A session that isn't watching shows nothing.
 
 | Command | |
 | --- | --- |
@@ -34,11 +44,15 @@ During a notes turn the built-in question dialog is refused in favour of `ask_ab
 | `/notes clear` | Remove done notes |
 | `/notes path` | Show the notes file |
 
-Delivery is `manual` by default. Set the `delivery` option to `auto` (in `/config`) to send new notes a few seconds after they stop arriving.
-
 ## How it works
 
-Notes live in `<git dir>/claude-notes.json`, shared with the Neovim plugin, so they're never committed. Before sending, a session writes its id into each note, waits 300 ms and reads the file back, so two watching sessions don't send the same note.
+Claude gets two tools, `resolve_note` and `ask_about_note`. During a notes turn the built-in question dialog is refused in favour of `ask_about_note`. When the turn ends, notes Claude didn't touch get its last message as their question, and an interrupted turn puts them back to open.
+
+Notes live in `<git dir>/claude-notes.json`, shared with the Neovim plugin, so they never get committed. Before sending, the session writes its id into each note, waits 300 ms and reads the file back, so two watching sessions don't send the same note. Notes and the code they point at go to the model, so keep secrets and customer data out of them.
+
+## Options
+
+`delivery`, in `/config`: `manual` by default. `auto` sends new notes a few seconds after they stop arriving.
 
 ## Tests
 
