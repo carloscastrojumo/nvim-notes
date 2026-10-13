@@ -1,0 +1,16 @@
+{
+  "name": "nvim-notes",
+  "version": "0.1.0",
+  "description": "Picks up review notes left on lines of code in Neovim and hands them to Claude to work on.",
+  "author": { "name": "Carlos Castro" },
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "delivery": {
+      "type": "string",
+      "title": "Note delivery",
+      "description": "manual: send with /notes or the band's Send button. auto: send new notes a few seconds after they stop arriving.",
+      "options": ["manual", "auto"],
+      "default": "manual"
+    }
+  }
+}

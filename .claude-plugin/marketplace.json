@@ -1,0 +1,16 @@
+{
+  "name": "claude-notes",
+  "owner": {
+    "name": "Carlos Castro"
+  },
+  "metadata": {
+    "description": "Claude Code side of claude-notes.nvim: review notes from Neovim"
+  },
+  "plugins": [
+    {
+      "name": "nvim-notes",
+      "source": "./",
+      "description": "Picks up review notes left on lines of code in Neovim and hands them to Claude to work on."
+    }
+  ]
+}
