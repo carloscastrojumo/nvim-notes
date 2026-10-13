@@ -362,6 +362,15 @@ test('an answer sent while the earlier notes turn still runs is left to the next
   expect((await $.tool.call({ tool: 'AskUserQuestion', questions: [] } as never)).deny).toContain(ASK)
 })
 
+test('parallel resolve_note calls all land', async ($, on) => {
+  const f = fake(on, [note('a1', { status: 'sent' }), note('b2', { status: 'sent' }), note('c3', { status: 'sent' })])
+  await boot($, f.clock)
+
+  await Promise.all(['a1', 'b2', 'c3'].map(id => $.tool.call({ tool: TOOL, id, reply: `did ${id}` } as never)))
+
+  expect(f.stored().map(one => one.status)).toEqual(['done', 'done', 'done'])
+})
+
 test('outside a git repository /notes watch says why', async ($, on) => {
   const clock = mock.clock(on)
   on('session.start', async (_$, e) => ({ cwd: e.cwd }))

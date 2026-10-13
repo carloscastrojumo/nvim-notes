@@ -70,7 +70,18 @@ const writeFile = async ($: EngineInterface, path: string, file: NotesFile) => {
   await setBoard($, file.notes, null)
 }
 
-const mutate = async ($: EngineInterface, change: (notes: readonly Note[]) => Note[]) => {
+// Tool calls can run in parallel; each read-modify-write of the notes file waits for the one before it.
+let queue: Promise<unknown> = Promise.resolve()
+const serial = <T,>(work: () => Promise<T>): Promise<T> => {
+  const run = queue.then(work, work)
+  queue = run.catch(() => undefined)
+
+  return run
+}
+
+const mutate = ($: EngineInterface, change: (notes: readonly Note[]) => Note[]) => serial(() => mutateNow($, change))
+
+const mutateNow = async ($: EngineInterface, change: (notes: readonly Note[]) => Note[]) => {
   const path = requirePath()
   const file = await readFile($, path)
   const notes = change(file.notes)
@@ -80,7 +91,9 @@ const mutate = async ($: EngineInterface, change: (notes: readonly Note[]) => No
 }
 
 // Another session may claim the same notes between our read and write; the read-back after a pause shows who won.
-const claim = async ($: EngineInterface, statuses: readonly NoteStatus[]) => {
+const claim = ($: EngineInterface, statuses: readonly NoteStatus[]) => serial(() => claimNow($, statuses))
+
+const claimNow = async ($: EngineInterface, statuses: readonly NoteStatus[]) => {
   const path = requirePath()
   const file = await readFile($, path)
   const ids = new Set(file.notes.filter(note => statuses.includes(note.status)).map(note => note.id))
