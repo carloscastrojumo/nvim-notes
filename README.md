@@ -2,6 +2,8 @@
 
 # nvim-notes
 
+[![CI](https://github.com/carloscastrojumo/nvim-notes/actions/workflows/ci.yml/badge.svg)](https://github.com/carloscastrojumo/nvim-notes/actions/workflows/ci.yml)
+
 The Claude Code half of [claude-notes.nvim](https://github.com/carloscastrojumo/claude-notes.nvim). You leave notes on code in Neovim. A Claude Code session running this mod picks them up and writes each reply back next to the code. If a note is unclear, Claude asks, and the question lands in Neovim rather than in a chat you're not watching.
 
 ```
@@ -12,11 +14,12 @@ It's a mod, a Claude Code plugin built on function hooks. That API is early acce
 
 ## Install
 
-Clone it and load it from disk:
+Clone it, check out the latest [release](https://github.com/carloscastrojumo/nvim-notes/releases), and load it from disk:
 
 ```sh
 git clone https://github.com/carloscastrojumo/nvim-notes
-claude --plugin-dir <path to the clone>
+git -C nvim-notes checkout "$(git -C nvim-notes describe --tags --abbrev=0)"
+claude --plugin-dir nvim-notes
 ```
 
 To load it in every session without the flag, set `CLAUDE_CODE_PLUGIN_DIRS` to that path in the `env` block of `~/.claude/settings.json`.
@@ -53,6 +56,10 @@ Notes live in `<git dir>/claude-notes.json`, shared with the Neovim plugin, so t
 ## Options
 
 `delivery`, in `/config`: `manual` by default. `auto` sends new notes a few seconds after they stop arriving.
+
+## Releases
+
+Bump `version` in `.claude-plugin/plugin.json`, then push a matching `vX.Y.Z` tag. The release workflow runs the tests against the Claude Code version pinned in CI, checks the tag matches `plugin.json`, and publishes a GitHub release with generated notes. Claude Code reads that `version` to tell whether an installed copy needs updating.
 
 ## Tests
 
