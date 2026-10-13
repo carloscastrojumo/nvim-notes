@@ -15,7 +15,7 @@ It's a mod, a Claude Code plugin built on function hooks. That API is early acce
 Clone it and load it from disk:
 
 ```sh
-git clone https://github.com/carloscastrojumo/claude-notes-mod
+git clone https://github.com/carloscastrojumo/nvim-notes
 claude --plugin-dir <path to the clone>
 ```
 
@@ -24,7 +24,7 @@ To load it in every session without the flag, set `CLAUDE_CODE_PLUGIN_DIRS` to t
 If your Claude Code accepts marketplaces outside your organisation's list, it also installs as a plugin:
 
 ```
-/plugin install nvim-notes --marketplace carloscastrojumo/claude-notes-mod
+/plugin install nvim-notes --marketplace carloscastrojumo/nvim-notes
 ```
 
 ## Use
