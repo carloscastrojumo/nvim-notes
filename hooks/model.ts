@@ -85,7 +85,7 @@ const quote = (text: string) => text.split('\n').map(line => `> ${line}`).join('
 
 const threadText = (thread: readonly ThreadEntry[] | undefined) => {
   if (thread === undefined || thread.length === 0) return ''
-  const entries = thread.map(entry => `${entry.from === 'claude' ? 'You asked' : 'They answered'}:\n${quote(entry.text)}`)
+  const entries = thread.map(entry => `${entry.from === 'claude' ? 'You said' : 'They said'}:\n${quote(entry.text)}`)
 
   return `\n\nEarlier on this note:\n${entries.join('\n')}`
 }

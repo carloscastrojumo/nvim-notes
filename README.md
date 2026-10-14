@@ -34,7 +34,7 @@ If your Claude Code accepts marketplaces outside your organisation's list, it al
 
 1. Run `/notes watch` in the session that should work on your notes. A band above the prompt shows what's open, queued, with Claude, or waiting on you.
 2. Notes you send from Neovim with `<leader>aS` arrive within about 1.5 s, as one prompt.
-3. Claude marks each note done with a one-line reply, or asks about it. The question goes to Neovim, and your answer comes back with the note.
+3. Claude marks each note done with a one-line reply, or asks about it. The question goes to Neovim, and your answer comes back with the note. You can also follow up on a done note from Neovim; it comes back with Claude's earlier reply.
 
 Only a watching session picks up notes, so with several sessions open in one repository you choose which one gets them. A session that isn't watching shows nothing.
 

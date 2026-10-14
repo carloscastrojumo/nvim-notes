@@ -335,7 +335,7 @@ test('an answered question comes back to Claude with the exchange so far', async
   await f.clock.advance(1_500)
   await settle(f.clock)
 
-  expect(f.prompts[0]).toContain('You asked:\n> Which timeout?\nThey answered:\n> 5s')
+  expect(f.prompts[0]).toContain('You said:\n> Which timeout?\nThey said:\n> 5s')
 })
 
 test('an answer sent while the earlier notes turn still runs is left to the next turn', async ($, on) => {

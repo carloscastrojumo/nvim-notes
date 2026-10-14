@@ -78,7 +78,7 @@ test('a thread is parsed, kept and shown to Claude', async () => {
 
   expect(parseNotes(serializeNotes(file))).toEqual(file)
   const prompt = buildPrompt(file.notes, '/repo', '/repo', { resolve: 'r', ask: 'a' })
-  expect(prompt).toContain('Earlier on this note:\nYou asked:\n> Which timeout?\nThey answered:\n> 5 seconds\n> for every call')
+  expect(prompt).toContain('Earlier on this note:\nYou said:\n> Which timeout?\nThey said:\n> 5 seconds\n> for every call')
   expect(noteIdsIn(prompt)).toEqual(['a1'])
 })
 
